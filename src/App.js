@@ -1,39 +1,36 @@
 import React from 'react';
+
+// Import components
 import {
   ChakraProvider,
   Box,
   Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
+  // Link,
+  // VStack,
+  // Code,
+  // Grid,
   theme,
 } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
+// import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { Cart, Address } from 'components';
+
+// Import xState
+import { useMachine } from '@xstate/react';
+import { inspect } from '@xstate/inspect';
+import checkoutStateMachine from './state/checkoutStateMachine';
+
+inspect({ iframe: false, url: 'https://statecharts.io/inspect' });
 
 function App() {
+  const [state, send] = useMachine(checkoutStateMachine, { devTools: true });
+
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
+        <Text>STATE{state.value}</Text>
+        <Text>CONTEXT{JSON.stringify(state.context)}</Text>
+        <Box>{state.value.match('cart') && <Cart send={send} />}</Box>
+        <Box>{state.value.match('addressed') && <Address send={send} />}</Box>
       </Box>
     </ChakraProvider>
   );
