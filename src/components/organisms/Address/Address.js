@@ -14,7 +14,8 @@ import {
   INITIAL_STATE,
   SELECT_VALUES,
 } from './form/input_fields';
-function Address({ send }) {
+
+function Address({ send, initialData }) {
   const selectResources = { country: SELECT_VALUES };
 
   const validationSchema = useMemo(
@@ -23,19 +24,19 @@ function Address({ send }) {
   );
 
   const handleSubmit = (values) => {
-    console.log('values', values);
+    send({ type: 'SELECT_SHIPPING', value: values });
   };
 
   return (
     <>
       <FormTemplate
-        initialValues={INITIAL_STATE}
+        initialValues={initialData || INITIAL_STATE}
         validationSchema={validationSchema}
         fields={ADDRESS_FIELDS}
         selectResources={selectResources}
         onSubmit={handleSubmit}
         hideCancelButton={true}
-        //  cancel={handleCancel}
+        submitButtonText="Save and go to shipping"
       />
       <Button onClick={() => send('SELECT_SHIPPING')}>Select shipping</Button>
       <Button onClick={() => send('SKIP_SHIPPING')}>Skip shipping</Button>

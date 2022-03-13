@@ -5,7 +5,7 @@ const checkoutStateMachine = createMachine({
   initial: 'cart',
   context: {
     cart: {},
-    address: {},
+    address: null,
     shipping_method: null,
     payment_method: null,
   },
@@ -20,13 +20,19 @@ const checkoutStateMachine = createMachine({
     },
     addressed: {
       on: {
-        SELECT_SHIPPING: 'shipping_selected',
+        SELECT_SHIPPING: {
+          target: 'shipping_selected',
+          actions: assign({ address: (_, event) => event.value }),
+        },
         SKIP_SHIPPING: 'shipping_skipped',
       },
     },
     shipping_selected: {
       on: {
-        SELECT_PAYMENT: 'payment_selected',
+        SELECT_PAYMENT: {
+          target: 'payment_selected',
+          actions: assign({ shipping_method: (_, event) => event.value }),
+        },
         SKIP_PAYMENT: 'payment_skipped',
         ADDRESS: 'addressed',
       },
@@ -41,7 +47,10 @@ const checkoutStateMachine = createMachine({
     payment_selected: {
       on: {
         ADDRESS: 'addressed',
-        COMPLETE: 'completed',
+        COMPLETE: {
+          target: 'completed',
+          actions: assign({ payment_method: (_, event) => event.value }),
+        },
         SELECT_SHIPPING: 'shipping_selected',
         SKIP_SHIPPING: 'shipping_skipped',
       },

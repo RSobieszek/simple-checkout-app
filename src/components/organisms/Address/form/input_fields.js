@@ -1,8 +1,11 @@
 import * as yup from 'yup';
 
+export const POLAND = 'Poland';
+export const UNITED_STATES = 'United States';
+
 export const SELECT_VALUES = [
-  { name: 'Poland', value: 'Poland' },
-  { name: 'United States', value: 'United States' },
+  { name: POLAND, value: POLAND },
+  { name: UNITED_STATES, value: UNITED_STATES },
 ];
 
 export const INITIAL_STATE = {

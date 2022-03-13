@@ -1,19 +1,8 @@
 import React from 'react';
 
 // Import components
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  // Link,
-  // VStack,
-  // Code,
-  // Grid,
-  theme,
-  extendTheme,
-} from '@chakra-ui/react';
-// import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Cart, Address } from 'components';
+import { ChakraProvider, Box, Text, theme } from '@chakra-ui/react';
+import { Cart, Address, Shipping, Payment } from 'components';
 
 // Import xState
 import { useMachine } from '@xstate/react';
@@ -29,9 +18,29 @@ function App() {
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
         <Text>STATE{state.value}</Text>
-        <Text>CONTEXT{JSON.stringify(state.context)}</Text>
-        <Box>{state.value.match('cart') && <Cart send={send} />}</Box>
-        <Box>{state.value.match('addressed') && <Address send={send} />}</Box>
+        <Text>CONTEXT{JSON.stringify(state.context, null, 2)}</Text>
+
+        {state.value.match('cart') && <Cart send={send} />}
+
+        {state.value.match('addressed') && (
+          <Address send={send} initialData={state.context.address} />
+        )}
+
+        {state.value.match('shipping_selected') && (
+          <Shipping
+            send={send}
+            initialData={state.context.shipping_method}
+            address={state.context.address}
+          />
+        )}
+
+        {state.value.match('payment_selected') && (
+          <Payment
+            send={send}
+            initialData={state.context.shipping_method}
+            address={state.context.address}
+          />
+        )}
       </Box>
     </ChakraProvider>
   );

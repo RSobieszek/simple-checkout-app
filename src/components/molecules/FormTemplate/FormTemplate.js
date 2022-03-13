@@ -12,12 +12,13 @@ import { FormButtons } from 'components';
 
 function FormTemplate({
   initialValues = {},
-  validationSchema = {},
+  validationSchema = null,
   onSubmit = () => {},
   cancel = () => {},
   fields = [],
   selectResources = [],
   hideCancelButton,
+  submitButtonText,
 }) {
   return (
     <Container>
@@ -31,7 +32,11 @@ function FormTemplate({
             {fields.map((field, index) =>
               renderFields({ index, field, selectResources })
             )}
-            <FormButtons cancel={cancel} hideCancelButton={hideCancelButton} />
+            <FormButtons
+              cancel={cancel}
+              hideCancelButton={hideCancelButton}
+              submitButtonText={submitButtonText}
+            />
           </Form>
         )}
       </Formik>
