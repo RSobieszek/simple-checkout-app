@@ -1,70 +1,85 @@
 import { createMachine, assign } from 'xstate';
 
-const checkoutStateMachine = createMachine({
-  id: 'checkoutStateMachine',
-  initial: 'cart',
-  context: {
-    cart: {},
-    address: null,
-    shipping_method: null,
-    payment_method: null,
+const checkoutStateMachine = createMachine(
+  {
+    id: 'checkoutStateMachine',
+    initial: 'cart',
+    context: {
+      cart: {},
+      address: null,
+      shipping_method: null,
+      payment_method: null,
+    },
+    states: {
+      cart: {
+        on: {
+          ADDRESS: {
+            target: 'addressed',
+            actions: assign({ cart: (_, event) => event.value }),
+          },
+        },
+      },
+      addressed: {
+        on: {
+          SELECT_SHIPPING: {
+            target: 'shipping_selected',
+            actions: 'setAddress',
+          },
+          SKIP_SHIPPING: {
+            target: 'shipping_skipped',
+            actions: 'setAddress',
+          },
+        },
+      },
+      shipping_selected: {
+        on: {
+          SELECT_PAYMENT: {
+            target: 'payment_selected',
+            actions: 'setShippingMethod',
+          },
+          SKIP_PAYMENT: {
+            target: 'payment_skipped',
+            actions: 'setShippingMethod',
+          },
+          ADDRESS: 'addressed',
+        },
+      },
+      shipping_skipped: {
+        on: {
+          SELECT_PAYMENT: 'payment_selected',
+          SKIP_PAYMENT: 'payment_skipped',
+          ADDRESS: 'addressed',
+        },
+      },
+      payment_selected: {
+        on: {
+          ADDRESS: 'addressed',
+          COMPLETE: {
+            target: 'completed',
+            actions: 'setPaymentMethod',
+          },
+          SELECT_SHIPPING: 'shipping_selected',
+          SKIP_SHIPPING: 'shipping_skipped',
+        },
+      },
+      payment_skipped: {
+        on: {
+          ADDRESS: 'addressed',
+          COMPLETE: 'completed',
+          SELECT_SHIPPING: 'shipping_selected',
+          SKIP_SHIPPING: 'shipping_skipped',
+        },
+      },
+      completed: {},
+    },
   },
-  states: {
-    cart: {
-      on: {
-        ADDRESS: {
-          target: 'addressed',
-          actions: assign({ cart: (_, event) => event.value }),
-        },
-      },
+  {
+    actions: {
+      setAddress: assign({ address: (_, event) => event.value }),
+      setShippingMethod: assign({ shipping_method: (_, event) => event.value }),
+      setPaymentMethod: assign({ payment_method: (_, event) => event.value }),
     },
-    addressed: {
-      on: {
-        SELECT_SHIPPING: {
-          target: 'shipping_selected',
-          actions: assign({ address: (_, event) => event.value }),
-        },
-        SKIP_SHIPPING: 'shipping_skipped',
-      },
-    },
-    shipping_selected: {
-      on: {
-        SELECT_PAYMENT: {
-          target: 'payment_selected',
-          actions: assign({ shipping_method: (_, event) => event.value }),
-        },
-        SKIP_PAYMENT: 'payment_skipped',
-        ADDRESS: 'addressed',
-      },
-    },
-    shipping_skipped: {
-      on: {
-        SELECT_PAYMENT: 'payment_selected',
-        SKIP_PAYMENT: 'payment_skipped',
-        ADDRESS: 'addressed',
-      },
-    },
-    payment_selected: {
-      on: {
-        ADDRESS: 'addressed',
-        COMPLETE: {
-          target: 'completed',
-          actions: assign({ payment_method: (_, event) => event.value }),
-        },
-        SELECT_SHIPPING: 'shipping_selected',
-        SKIP_SHIPPING: 'shipping_skipped',
-      },
-    },
-    payment_skipped: {
-      on: {
-        ADDRESS: 'addressed',
-        COMPLETE: 'completed',
-        SELECT_SHIPPING: 'shipping_selected',
-        SKIP_SHIPPING: 'shipping_skipped',
-      },
-    },
-    completed: {},
-  },
-});
+  }
+);
 
 export default checkoutStateMachine;

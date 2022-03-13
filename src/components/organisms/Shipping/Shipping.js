@@ -1,8 +1,7 @@
 import React from 'react';
-import { func } from 'prop-types';
+import { func, object } from 'prop-types';
 
 // Import components
-import { Button } from '@chakra-ui/react';
 import { FormTemplate } from 'components';
 
 // Import fields
@@ -20,29 +19,40 @@ function Shipping({ send, address }) {
     return { shipping_method: selectValues };
   };
 
-  const handleSubmit = ({ shipping_method }) => {
-    console.log('submitt');
-    send({ type: 'SELECT_PAYMENT', value: shipping_method });
+  const handleSubmit = (values) => {
+    const transitionType = values.skipped ? 'SKIP_PAYMENT' : 'SELECT_PAYMENT';
+
+    delete values.skipped;
+
+    const { shipping_method } = values;
+    send({ type: transitionType, value: shipping_method });
+  };
+
+  const handleSkipPayment = ({ form }) => {
+    // dirty hack but it's getting late
+    // basically I want to set proper xState transition based on
+    // which button is pressed, but still have proper form submission flow
+    form.setFieldValue('skipped', true, false);
+    form.handleSubmit();
   };
 
   return (
-    <>
-      <FormTemplate
-        initialValues={INITIAL_STATE}
-        fields={SHIPPING_FIELDS}
-        selectResources={prepareSelectResources(address)}
-        onSubmit={handleSubmit}
-        hideCancelButton={true}
-        submitButtonText="Save and go to payments"
-      />
-      <Button onClick={() => send('SELECT_SHIPPING')}>Select shipping</Button>
-      <Button onClick={() => send('SKIP_SHIPPING')}>Skip shipping</Button>
-    </>
+    <FormTemplate
+      initialValues={INITIAL_STATE}
+      fields={SHIPPING_FIELDS}
+      selectResources={prepareSelectResources(address)}
+      onSubmit={handleSubmit}
+      hideCancelButton={true}
+      submitButtonText="Save and go to payments"
+      skipButtonText="Save and pay later"
+      skip={handleSkipPayment}
+    />
   );
 }
 
 Shipping.propTypes = {
   send: func.isRequired,
+  address: object.isRequired,
 };
 
 export default Shipping;

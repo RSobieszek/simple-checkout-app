@@ -1,4 +1,5 @@
 import React from 'react';
+import { array, func, bool } from 'prop-types';
 
 // Import components
 import {
@@ -13,7 +14,11 @@ import {
 } from '@chakra-ui/react';
 import TableRow from './TableRow';
 
-function ProductTable({ productList, handleDelete }) {
+function ProductTable({
+  productList,
+  handleDelete = () => {},
+  showAction = true,
+}) {
   if (!productList.length) {
     return (
       <Container py="18">
@@ -38,7 +43,7 @@ function ProductTable({ productList, handleDelete }) {
             <Th>Product name</Th>
             <Th>Product price</Th>
             <Th>Shipping required</Th>
-            <Th>Action</Th>
+            {showAction && <Th>Action</Th>}
           </Tr>
         </Thead>
         <Tbody>
@@ -47,6 +52,7 @@ function ProductTable({ productList, handleDelete }) {
               key={product.product_name}
               product={product}
               handleDelete={handleDelete}
+              showAction={showAction}
             />
           ))}
         </Tbody>
@@ -54,5 +60,11 @@ function ProductTable({ productList, handleDelete }) {
     </Container>
   );
 }
+
+ProductTable.propTypes = {
+  productList: array,
+  handleDelete: func,
+  showAction: bool,
+};
 
 export default ProductTable;

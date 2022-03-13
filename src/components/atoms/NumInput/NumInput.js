@@ -17,7 +17,7 @@ function NumInput({ field, form, label, placeholder }) {
     <FormControl isInvalid={!!fieldErrorMessage}>
       <FormLabel>{label}</FormLabel>
       <NumberInput step={0} {...field}>
-        <NumberInputField {...field} placeholder={placeholder} />
+        <NumberInputField {...field} placeholder={placeholder} type="number" />
       </NumberInput>
       <FormErrorMessage>{fieldErrorMessage}</FormErrorMessage>
       <Divider mt={30} mb={15} />

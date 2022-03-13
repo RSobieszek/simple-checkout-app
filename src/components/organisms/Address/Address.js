@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import { func } from 'prop-types';
+import { func, object } from 'prop-types';
 
 // Import components
-import { Button } from '@chakra-ui/react';
 import { FormTemplate } from 'components';
 
 // Import utilities
@@ -24,28 +23,39 @@ function Address({ send, initialData }) {
   );
 
   const handleSubmit = (values) => {
-    send({ type: 'SELECT_SHIPPING', value: values });
+    const transitionType = values.skipped ? 'SKIP_SHIPPING' : 'SELECT_SHIPPING';
+
+    delete values.skipped;
+
+    send({ type: transitionType, value: values });
+  };
+
+  const handleSkipShipping = ({ form }) => {
+    // dirty hack but it's getting late
+    // basically I want to set proper xState transition based on
+    // which button is pressed, but still have proper form submission flow
+    form.setFieldValue('skipped', true, false);
+    form.handleSubmit();
   };
 
   return (
-    <>
-      <FormTemplate
-        initialValues={initialData || INITIAL_STATE}
-        validationSchema={validationSchema}
-        fields={ADDRESS_FIELDS}
-        selectResources={selectResources}
-        onSubmit={handleSubmit}
-        hideCancelButton={true}
-        submitButtonText="Save and go to shipping"
-      />
-      <Button onClick={() => send('SELECT_SHIPPING')}>Select shipping</Button>
-      <Button onClick={() => send('SKIP_SHIPPING')}>Skip shipping</Button>
-    </>
+    <FormTemplate
+      initialValues={initialData || INITIAL_STATE}
+      validationSchema={validationSchema}
+      fields={ADDRESS_FIELDS}
+      selectResources={selectResources}
+      onSubmit={handleSubmit}
+      hideCancelButton={true}
+      submitButtonText="Save and go to shipping"
+      skipButtonText="Save and skip shippment"
+      skip={handleSkipShipping}
+    />
   );
 }
 
 Address.propTypes = {
   send: func.isRequired,
+  initialData: object,
 };
 
 export default Address;

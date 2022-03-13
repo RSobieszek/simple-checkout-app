@@ -44,7 +44,7 @@ function Cart({ send }) {
         isDisabled={!productList.length}
         onClick={() => send({ type: 'ADDRESS', value: productList })}
       >
-        Next step
+        Confirm cart
       </Button>
     </>
   );

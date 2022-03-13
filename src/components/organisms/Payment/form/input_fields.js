@@ -5,7 +5,7 @@ export const SELECT_VALUES = [
 ];
 
 export const INITIAL_STATE = {
-  shipping_method: SELECT_VALUES[0].value,
+  payment_method: SELECT_VALUES[0].value,
 };
 
 export const PAYMENT_FIELDS = [

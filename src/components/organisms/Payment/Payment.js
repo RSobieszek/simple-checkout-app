@@ -14,8 +14,8 @@ import {
 function Payment({ send }) {
   const selectResources = { payment_method: SELECT_VALUES };
 
-  const handleSubmit = ({ payment_method }) => {
-    send({ type: 'COMPLETE', value: payment_method });
+  const handleSubmit = (values) => {
+    send({ type: 'COMPLETE', value: values.payment_method });
   };
 
   return (

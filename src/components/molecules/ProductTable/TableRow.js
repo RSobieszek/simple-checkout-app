@@ -1,10 +1,10 @@
 import React from 'react';
 
 // Import components
-import { Badge, Button, Td, Tr } from '@chakra-ui/react';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { Button, Td, Tr } from '@chakra-ui/react';
+import { DeleteIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
-function TableRow({ product, handleDelete }) {
+function TableRow({ product, handleDelete, showAction }) {
   const { product_name, product_price, shipping_required, product_id } =
     product;
   return (
@@ -12,17 +12,19 @@ function TableRow({ product, handleDelete }) {
       <Td>{product_name}</Td>
       <Td>{product_price}</Td>
       <Td>
-        {shipping_required && (
-          <Badge colorScheme="pink" variant="solid">
-            Requires shipping!
-          </Badge>
+        {shipping_required ? (
+          <CheckIcon color="green.400" />
+        ) : (
+          <CloseIcon color="red.400" />
         )}
       </Td>
-      <Td>
-        <Button colorScheme="red" onClick={() => handleDelete(product_id)}>
-          <DeleteIcon />
-        </Button>
-      </Td>
+      {showAction && (
+        <Td>
+          <Button colorScheme="red" onClick={() => handleDelete(product_id)}>
+            <DeleteIcon />
+          </Button>
+        </Td>
+      )}
     </Tr>
   );
 }
