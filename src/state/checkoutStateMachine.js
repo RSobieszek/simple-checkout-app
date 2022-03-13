@@ -1,4 +1,4 @@
-import { createMachine } from 'xstate';
+import { createMachine, assign } from 'xstate';
 
 const checkoutStateMachine = createMachine({
   id: 'checkoutStateMachine',
@@ -12,7 +12,10 @@ const checkoutStateMachine = createMachine({
   states: {
     cart: {
       on: {
-        ADDRESS: 'addressed',
+        ADDRESS: {
+          target: 'addressed',
+          actions: assign({ cart: (_, event) => event.value }),
+        },
       },
     },
     addressed: {

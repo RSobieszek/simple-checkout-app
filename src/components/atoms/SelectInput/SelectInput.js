@@ -4,25 +4,24 @@ import React from 'react';
 import {
   FormControl,
   FormLabel,
-  NumberInput,
   FormErrorMessage,
   Divider,
-  NumberInputField,
+  Select,
 } from '@chakra-ui/react';
 
-function NumInput({ field, form, label, placeholder }) {
+function SelectInput({ field, form, label, placeholder, children }) {
   const fieldErrorMessage = form.errors[field.name];
 
   return (
     <FormControl isInvalid={!!fieldErrorMessage}>
       <FormLabel>{label}</FormLabel>
-      <NumberInput step={0} {...field}>
-        <NumberInputField {...field} placeholder={placeholder} />
-      </NumberInput>
+      <Select {...field} placeholder={placeholder}>
+        {children}
+      </Select>
       <FormErrorMessage>{fieldErrorMessage}</FormErrorMessage>
       <Divider mt={30} mb={15} />
     </FormControl>
   );
 }
 
-export default NumInput;
+export default SelectInput;

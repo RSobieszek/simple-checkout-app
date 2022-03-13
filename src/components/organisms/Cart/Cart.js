@@ -1,39 +1,51 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { func } from 'prop-types';
 
-import * as yup from 'yup';
-
 // Import components
-import { Button } from '@chakra-ui/react';
-import { FormTemplate } from 'components';
-
-// Import utilities
-import { createValidationSchema } from 'utilities';
+import { Button, Container, Flex, Text } from '@chakra-ui/react';
+import { FormTemplate, FormModal, ProductTable } from 'components';
 
 // Import fields
 import { PRODUCT_FIELDS, INITIAL_STATE } from './form/input_fields';
 
-function Cart({ send }) {
-  const validationSchema = useMemo(
-    () => createValidationSchema(PRODUCT_FIELDS),
-    []
-  );
+// Import logic
+import useCart from './useCart';
 
-  const handleSubmit = values => {
-    console.log('submit');
-    console.log(values);
-  };
+function Cart({ send }) {
+  const {
+    productList,
+    validationSchema,
+    submit: handleSubmit,
+    isOpen,
+    toggle,
+    handleDelete,
+    handleCancel,
+  } = useCart();
 
   return (
     <>
-      <div>Cart</div>
-      <FormTemplate
-        initialValues={INITIAL_STATE}
-        validationSchema={validationSchema}
-        fields={PRODUCT_FIELDS}
-        onSubmit={handleSubmit}
-      />
-      <Button onClick={() => send('ADDRESS')}>Shipping Address</Button>
+      <Container>
+        <Flex justify={'space-between'}>
+          <Text>CART</Text>
+          <Button onClick={toggle}>ADD PRODUCT</Button>
+        </Flex>
+      </Container>
+      <ProductTable productList={productList} handleDelete={handleDelete} />
+      <FormModal isOpen={isOpen} onClose={toggle} headingText="Add product:">
+        <FormTemplate
+          initialValues={INITIAL_STATE}
+          validationSchema={validationSchema}
+          fields={PRODUCT_FIELDS}
+          onSubmit={handleSubmit}
+          cancel={handleCancel}
+        />
+      </FormModal>
+      <Button
+        isDisabled={!productList.length}
+        onClick={() => send({ type: 'ADDRESS', value: productList })}
+      >
+        Next step
+      </Button>
     </>
   );
 }
@@ -43,9 +55,3 @@ Cart.propTypes = {
 };
 
 export default Cart;
-
-// initialValues,
-// validationSchema,
-// onSubmit,
-// fields = [],
-// selectResources,

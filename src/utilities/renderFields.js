@@ -2,8 +2,7 @@ import React from 'react';
 
 // Import components
 import { Field } from 'formik';
-import { Select, NumberInput, Checkbox } from '@chakra-ui/react';
-import { TextInput, NumInput, CheckboxInput } from 'components';
+import { TextInput, NumInput, CheckboxInput, SelectInput } from 'components';
 
 const renderFields = ({ field, index, selectResources = [] }) => {
   const { type, name, placeholder, label } = field;
@@ -14,8 +13,9 @@ const renderFields = ({ field, index, selectResources = [] }) => {
         <Field
           key={`${name}-${index}`}
           name={name}
+          label={label}
           placeholder={placeholder}
-          component={Select}
+          component={SelectInput}
         >
           {selectResources[name].map(({ name, value }) => (
             <option key={value} value={value}>

@@ -19,8 +19,12 @@ export const PRODUCT_FIELDS = [
     type: 'number',
     validation: yup
       .number()
-      .positive('Price cannot be negative value')
-      .required('Price is required'),
+      .min(0, 'Price cannot be negative value')
+      .required('Price is required')
+      //using mask would be better idea
+      .test('2DigitsAfterDecimal', 'Incorrect price format (0.00)', (number) =>
+        /^\d+(\.\d{1,2})?$/.test(number)
+      ),
   },
   {
     name: 'shipping_required',

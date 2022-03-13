@@ -10,6 +10,7 @@ import {
   // Code,
   // Grid,
   theme,
+  extendTheme,
 } from '@chakra-ui/react';
 // import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Cart, Address } from 'components';

@@ -4,22 +4,21 @@ import React from 'react';
 import {
   FormControl,
   FormLabel,
-  NumberInput,
-  FormErrorMessage,
   Divider,
-  NumberInputField,
   Checkbox,
   HStack,
 } from '@chakra-ui/react';
 
-function CheckboxInput({ field, form, label, placeholder }) {
-  const fieldErrorMessage = form.errors[field.name];
+function CheckboxInput({ field, form, label }) {
+  const { name, value } = field;
+
+  const fieldErrorMessage = form.errors[name];
 
   return (
     <FormControl isInvalid={!!fieldErrorMessage}>
       <FormLabel>{label}</FormLabel>
       <HStack>
-        <Checkbox {...field} />
+        <Checkbox {...field} isChecked={value} />
       </HStack>
       <Divider mt={30} mb={15} />
     </FormControl>

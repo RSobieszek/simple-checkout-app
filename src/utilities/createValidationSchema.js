@@ -8,8 +8,6 @@ const createValidationSchema = fields => {
     };
   }, {});
 
-  console.log('validationRules', validationRules);
-
   return yup.object().shape(validationRules);
 };
 

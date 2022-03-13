@@ -2,19 +2,22 @@ import React from 'react';
 
 // Import components
 import { Formik, Form } from 'formik';
-import { Button, Container } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 
 // Import utilities
 import { renderFields } from 'utilities';
+import { FormButtons } from 'components';
 
 // import {FormButtons} from 'components'
 
 function FormTemplate({
   initialValues = {},
-  validationSchema,
-  onSubmit,
+  validationSchema = {},
+  onSubmit = () => {},
+  cancel = () => {},
   fields = [],
-  selectResources,
+  selectResources = [],
+  hideCancelButton,
 }) {
   return (
     <Container>
@@ -23,12 +26,12 @@ function FormTemplate({
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {props => (
+        {(_) => (
           <Form>
             {fields.map((field, index) =>
               renderFields({ index, field, selectResources })
             )}
-            <Button type="submit">Submit</Button>
+            <FormButtons cancel={cancel} hideCancelButton={hideCancelButton} />
           </Form>
         )}
       </Formik>
