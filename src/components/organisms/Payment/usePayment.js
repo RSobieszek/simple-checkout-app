@@ -22,7 +22,7 @@ const usePayment = () => {
     : TRANSITIONS;
 
   const skipTransitions = [
-    ...TRANSITIONS,
+    ...transitions,
     { name: 'COMPLETE', text: 'Go to confirmation' },
   ];
 
