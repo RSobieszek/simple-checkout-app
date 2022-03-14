@@ -1,5 +1,8 @@
 import { useMemo, useReducer } from 'react';
 
+// Import context
+import { useCheckoutMachineContext } from 'state/context';
+
 // Import utilities
 import { createValidationSchema, useToggle } from 'utilities';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,6 +19,9 @@ import {
 import { PRODUCT_FIELDS } from './form/input_fields';
 
 const useCart = () => {
+  // MACHINE
+  const { send } = useCheckoutMachineContext();
+
   // LIST STATE
   const [productList, dispatch] = useReducer(productsReducer, initialState);
 
@@ -48,6 +54,9 @@ const useCart = () => {
     removeProduct(id)(dispatch);
   };
 
+  // CART
+  const handleConfirmCart = () => send({ type: 'ADDRESS', value: productList });
+
   return {
     productList,
     validationSchema,
@@ -56,6 +65,7 @@ const useCart = () => {
     toggle,
     handleDelete,
     handleCancel,
+    handleConfirmCart,
   };
 };
 

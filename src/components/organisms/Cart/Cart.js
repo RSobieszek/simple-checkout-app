@@ -1,5 +1,4 @@
 import React from 'react';
-import { func } from 'prop-types';
 
 // Import components
 import { Button, Container, Flex, Text } from '@chakra-ui/react';
@@ -11,7 +10,7 @@ import { PRODUCT_FIELDS, INITIAL_STATE } from './form/input_fields';
 // Import logic
 import useCart from './useCart';
 
-function Cart({ send }) {
+function Cart() {
   const {
     productList,
     validationSchema,
@@ -20,6 +19,7 @@ function Cart({ send }) {
     toggle,
     handleDelete,
     handleCancel,
+    handleConfirmCart,
   } = useCart();
 
   return (
@@ -40,18 +40,11 @@ function Cart({ send }) {
           cancel={handleCancel}
         />
       </FormModal>
-      <Button
-        isDisabled={!productList.length}
-        onClick={() => send({ type: 'ADDRESS', value: productList })}
-      >
+      <Button isDisabled={!productList.length} onClick={handleConfirmCart}>
         Confirm cart
       </Button>
     </>
   );
 }
-
-Cart.propTypes = {
-  send: func.isRequired,
-};
 
 export default Cart;
