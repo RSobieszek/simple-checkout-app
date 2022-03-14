@@ -19,6 +19,7 @@ import checkoutStateMachine from './state/checkoutStateMachine';
 inspect({ iframe: false, url: 'https://statecharts.io/inspect' });
 
 function App() {
+  // good idea would be to put machine inside
   const [state, send] = useMachine(checkoutStateMachine, { devTools: true });
 
   const showShipping = ['shipping_selected', 'shipping_skipped'].some(
@@ -34,7 +35,7 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
-        <Steps state={state} send={send} />
+        {/* <Steps state={state} send={send} /> */}
         <Text>STATE{currentState}</Text>
         <Code>CONTEXT{JSON.stringify(stateContext, null, 2)}</Code>
 

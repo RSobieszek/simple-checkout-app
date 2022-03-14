@@ -5,7 +5,8 @@ const checkoutStateMachine = createMachine(
     id: 'checkoutStateMachine',
     initial: 'cart',
     context: {
-      cart: {},
+      cart: [],
+      isShippingRequired: false,
       address: null,
       shipping_method: null,
       payment_method: null,
@@ -15,11 +16,12 @@ const checkoutStateMachine = createMachine(
         on: {
           ADDRESS: {
             target: 'addressed',
-            actions: assign({ cart: (_, event) => event.value }),
+            actions: 'setCart',
           },
         },
       },
       addressed: {
+        entry: 'setShippingRequired',
         on: {
           SELECT_SHIPPING: {
             target: 'shipping_selected',
@@ -77,7 +79,18 @@ const checkoutStateMachine = createMachine(
   },
   {
     actions: {
+      setCart: assign({ cart: (_, event) => event.value }),
       setAddress: assign({ address: (_, event) => event.value }),
+      setShippingRequired: assign(({ cart }) => {
+        const productsWithShipping = cart.filter(
+          ({ shipping_required }) => shipping_required
+        );
+        const isShippingRequired = !!productsWithShipping.length;
+
+        return {
+          isShippingRequired,
+        };
+      }),
       setShippingMethod: assign({ shipping_method: (_, event) => event.value }),
       setPaymentMethod: assign({ payment_method: (_, event) => event.value }),
       resetShipping: assign({ shipping_method: null }),

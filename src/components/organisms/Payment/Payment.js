@@ -20,10 +20,11 @@ const TRANSITIONS = {
 
 function Payment({ send, currentState }) {
   if (currentState.match('payment_skipped')) {
+    const SKIP_TRANSITIONS = { ...TRANSITIONS, COMPLETE: 'Go to confirmation' };
     return (
       <>
         <Box>pay later</Box>
-        <TransitionButtons transitions={TRANSITIONS} send={send} />
+        <TransitionButtons transitions={SKIP_TRANSITIONS} send={send} />
       </>
     );
   }
