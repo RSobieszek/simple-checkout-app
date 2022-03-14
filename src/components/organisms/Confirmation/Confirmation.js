@@ -1,9 +1,8 @@
 import React from 'react';
-import checkoutAPI from 'services';
 
 // Import components
-import { ProductTable, Card } from 'components';
-import { Text, VStack, Button } from '@chakra-ui/react';
+import { ProductTable, Card, AsyncButton } from 'components';
+import { Text, VStack } from '@chakra-ui/react';
 
 // Import context
 import { useCheckoutMachineContext } from 'state/context';
@@ -16,10 +15,6 @@ function Confirmation() {
     shipping_method,
     payment_method,
   } = stateContext;
-
-  const handleConfirm = async () => {
-    await checkoutAPI.post('', stateContext);
-  };
 
   return (
     <VStack gap="10px">
@@ -35,7 +30,7 @@ function Confirmation() {
       <Card headingText="Payment method:">
         <Text>{payment_method ?? 'Pay later (payment skipped)'}</Text>
       </Card>
-      <Button onClick={handleConfirm}>Confirm</Button>
+      <AsyncButton payload={stateContext}>Confirm</AsyncButton>
     </VStack>
   );
 }

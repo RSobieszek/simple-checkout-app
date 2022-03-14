@@ -17,12 +17,14 @@ const usePayment = () => {
     send({ type: 'COMPLETE', value: values.payment_method });
   };
 
-  if (isShippingRequired) {
-    delete TRANSITIONS.SKIP_SHIPPING;
-  }
+  const transitions = isShippingRequired
+    ? TRANSITIONS.filter(({ skip }) => !skip)
+    : TRANSITIONS;
 
-  const transitions = TRANSITIONS;
-  const skipTransitions = { ...TRANSITIONS, COMPLETE: 'Go to confirmation' };
+  const skipTransitions = [
+    ...TRANSITIONS,
+    { name: 'COMPLETE', text: 'Go to confirmation' },
+  ];
 
   const skipMode = currentStateValue.match('payment_skipped');
 

@@ -8,9 +8,9 @@ function TransitionButtons({ transitions, send, skipTitle = '' }) {
       <VStack gap="15px">
         <Text>{skipTitle}</Text>
         <HStack>
-          {Object.keys(transitions).map((transition) => (
-            <Button key={transition} onClick={() => send(transition)}>
-              {transitions[transition]}
+          {transitions.map(({ name, text }) => (
+            <Button key={name} onClick={() => send(name)}>
+              {text}
             </Button>
           ))}
         </HStack>

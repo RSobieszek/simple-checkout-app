@@ -8,15 +8,22 @@ import { POLAND } from 'components/organisms/Address/form/input_fields';
 // Import utilities
 import { handleSkip } from 'utilities';
 
+// Import helpers
+import { TRANSITIONS } from './helpers';
+
 const useShipping = () => {
   const { send, currentStateValue, isShippingRequired, stateContext } =
     useCheckoutMachineContext();
 
-  const address = stateContext.address;
+  const transitions = currentStateValue.match('shipping_selected')
+    ? TRANSITIONS.filter(({ skip }) => !skip)
+    : TRANSITIONS;
 
   const prepareSelectResources = () => {
     const selectValues =
-      address.country === POLAND ? [SELECT_VALUES[0]] : SELECT_VALUES;
+      stateContext.address.country === POLAND
+        ? [SELECT_VALUES[0]]
+        : SELECT_VALUES;
     return { shipping_method: selectValues };
   };
 
@@ -40,6 +47,7 @@ const useShipping = () => {
     handleSkipPayment: handleSkip,
     skipMode,
     isShippingRequired,
+    transitions,
   };
 };
 

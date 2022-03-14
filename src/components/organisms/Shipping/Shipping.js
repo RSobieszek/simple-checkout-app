@@ -9,17 +9,20 @@ import { SHIPPING_FIELDS, INITIAL_STATE } from './form/input_fields';
 // Import logic
 import useShipping from './useShipping';
 
-// Import helpers
-import { TRANSITIONS } from './helpers';
-
 function Shipping() {
-  const { send, selectResources, handleSubmit, handleSkipPayment, skipMode } =
-    useShipping();
+  const {
+    send,
+    selectResources,
+    handleSubmit,
+    handleSkipPayment,
+    skipMode,
+    transitions,
+  } = useShipping();
 
   if (skipMode) {
     return (
       <TransitionButtons
-        transitions={TRANSITIONS}
+        transitions={transitions}
         send={send}
         skipTitle={'Shipping skipped'}
       />
@@ -28,7 +31,7 @@ function Shipping() {
 
   return (
     <>
-      <TransitionButtons transitions={TRANSITIONS} send={send} />
+      <TransitionButtons transitions={transitions} send={send} />
       <FormTemplate
         initialValues={INITIAL_STATE}
         fields={SHIPPING_FIELDS}

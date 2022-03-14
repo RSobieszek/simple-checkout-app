@@ -1,5 +1,5 @@
-export const TRANSITIONS = {
-  SELECT_SHIPPING: 'Select shipping',
-  SKIP_SHIPPING: 'Skip shipping',
-  ADDRESS: 'Update address',
-};
+export const TRANSITIONS = [
+  { name: 'SELECT_SHIPPING', text: 'Select shipping' },
+  { name: 'SKIP_SHIPPING', text: 'Skip shipping', skip: true },
+  { name: 'ADDRESS', text: 'Update address' },
+];
