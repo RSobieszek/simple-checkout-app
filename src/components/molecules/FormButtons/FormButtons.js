@@ -8,20 +8,24 @@ function FormButtons({
   cancel,
   skip,
   hideCancelButton = false,
+  hideSubmitButton = false,
+  hideSkipButton = false,
   submitButtonText = 'Submit',
-  skipButtonText,
+  skipButtonText = '',
 }) {
   const form = useFormikContext();
+
+  const showSkipButton = !hideSkipButton && skipButtonText;
 
   return (
     <HStack justify={'end'}>
       {!hideCancelButton && <Button onClick={cancel}>Cancel</Button>}
-      {skipButtonText && (
+      {showSkipButton && (
         <Button variant="outline" onClick={() => skip({ form })}>
           {skipButtonText}
         </Button>
       )}
-      <Button type="submit">{submitButtonText}</Button>
+      {!hideSubmitButton && <Button type="submit">{submitButtonText}</Button>}
     </HStack>
   );
 }

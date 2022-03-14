@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Import components
-import { Button, Container, Flex, Text } from '@chakra-ui/react';
+import { Button, Container, Flex, VStack } from '@chakra-ui/react';
 import { FormTemplate, FormModal, ProductTable } from 'components';
 
 // Import fields
@@ -23,10 +23,9 @@ function Cart() {
   } = useCart();
 
   return (
-    <>
+    <VStack gap="15px">
       <Container>
-        <Flex justify={'space-between'}>
-          <Text>CART</Text>
+        <Flex justify={'end'}>
           <Button onClick={toggle}>ADD PRODUCT</Button>
         </Flex>
       </Container>
@@ -43,7 +42,7 @@ function Cart() {
       <Button isDisabled={!productList.length} onClick={handleConfirmCart}>
         Confirm cart
       </Button>
-    </>
+    </VStack>
   );
 }
 

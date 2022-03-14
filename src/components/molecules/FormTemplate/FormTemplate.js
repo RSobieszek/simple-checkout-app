@@ -17,6 +17,8 @@ function FormTemplate({
   fields = [],
   selectResources = [],
   hideCancelButton,
+  hideSubmitButton,
+  hideSkipButton,
   submitButtonText,
   skipButtonText,
 }) {
@@ -35,6 +37,8 @@ function FormTemplate({
             <FormButtons
               cancel={cancel}
               hideCancelButton={hideCancelButton}
+              hideSubmitButton={hideSubmitButton}
+              hideSkipButton={hideSkipButton}
               submitButtonText={submitButtonText}
               skipButtonText={skipButtonText}
               skip={skip}

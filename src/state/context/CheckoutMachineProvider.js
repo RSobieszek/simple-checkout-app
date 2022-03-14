@@ -15,8 +15,10 @@ export const CheckoutMachineContext = React.createContext();
 function CheckoutMachineProvider({ children }) {
   const [state, send] = useMachine(checkoutStateMachine, { devTools: true });
 
+  // state variables
   const currentStateValue = state.value;
   const stateContext = state.context;
+  const isShippingRequired = stateContext.isShippingRequired;
 
   // Main components visibility contidions
   const showCart = currentStateValue.match('cart');
@@ -41,6 +43,7 @@ function CheckoutMachineProvider({ children }) {
         showShipping,
         showPayment,
         showConfirmation,
+        isShippingRequired,
       }}
     >
       {children}

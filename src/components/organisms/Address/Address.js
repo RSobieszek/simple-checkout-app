@@ -14,6 +14,7 @@ function Address() {
     validationSchema,
     handleSubmit,
     handleSkipShipping,
+    isShippingRequired,
   } = useAddress();
 
   return (
@@ -24,6 +25,7 @@ function Address() {
       selectResources={selectResources}
       onSubmit={handleSubmit}
       hideCancelButton={true}
+      hideSkipButton={isShippingRequired}
       submitButtonText="Save and go to shipping"
       skipButtonText="Save and skip shippment"
       skip={handleSkipShipping}

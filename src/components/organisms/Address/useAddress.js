@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useCheckoutMachineContext } from 'state/context';
 
 // Import utilities
-import { createValidationSchema } from 'utilities';
+import { createValidationSchema, handleSkip } from 'utilities';
 
 // Import fields
 import {
@@ -14,7 +14,8 @@ import {
 } from './form/input_fields';
 
 export const useAddress = () => {
-  const { send, stateContext } = useCheckoutMachineContext();
+  const { send, stateContext, isShippingRequired } =
+    useCheckoutMachineContext();
 
   const selectResources = { country: SELECT_VALUES };
 
@@ -33,20 +34,13 @@ export const useAddress = () => {
     send({ type: transitionType, value: values });
   };
 
-  const handleSkipShipping = ({ form }) => {
-    // dirty hack but it's getting late
-    // basically I want to set proper xState transition based on
-    // which button is pressed, but still have proper form submission flow
-    form.setFieldValue('skipped', true, false);
-    form.handleSubmit();
-  };
-
   return {
     initialData,
     selectResources,
     validationSchema,
     handleSubmit,
-    handleSkipShipping,
+    handleSkipShipping: handleSkip,
+    isShippingRequired,
   };
 };
 

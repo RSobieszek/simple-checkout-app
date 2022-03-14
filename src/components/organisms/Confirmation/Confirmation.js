@@ -1,21 +1,24 @@
 import React from 'react';
-import { object } from 'prop-types';
 import checkoutAPI from 'services';
 
 // Import components
 import { ProductTable, Card } from 'components';
 import { Text, VStack, Button } from '@chakra-ui/react';
 
-function Confirmation({ context }) {
+// Import context
+import { useCheckoutMachineContext } from 'state/context';
+
+function Confirmation() {
+  const { stateContext } = useCheckoutMachineContext();
   const {
     cart: productList,
     address: { city, street, country },
     shipping_method,
     payment_method,
-  } = context;
+  } = stateContext;
 
   const handleConfirm = async () => {
-    await checkoutAPI.post('', context);
+    await checkoutAPI.post('', stateContext);
   };
 
   return (
@@ -27,18 +30,14 @@ function Confirmation({ context }) {
         <Text>Country: {country}</Text>
       </Card>
       <Card headingText="Shipping method:">
-        <Text>{shipping_method}</Text>
+        <Text>{shipping_method ?? 'Shipping skipped'}</Text>
       </Card>
       <Card headingText="Payment method:">
-        <Text>{payment_method}</Text>
+        <Text>{payment_method ?? 'Pay later (payment skipped)'}</Text>
       </Card>
       <Button onClick={handleConfirm}>Confirm</Button>
     </VStack>
   );
 }
-
-Confirmation.propTypes = {
-  context: object.isRequired,
-};
 
 export default Confirmation;

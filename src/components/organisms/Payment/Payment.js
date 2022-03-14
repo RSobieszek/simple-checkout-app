@@ -1,43 +1,37 @@
 import React from 'react';
-import { func } from 'prop-types';
 
 // Import components
 import { FormTemplate, TransitionButtons } from 'components';
 
 // Import fields
-import {
-  PAYMENT_FIELDS,
-  INITIAL_STATE,
-  SELECT_VALUES,
-} from './form/input_fields';
-import { Box } from '@chakra-ui/react';
+import { PAYMENT_FIELDS, INITIAL_STATE } from './form/input_fields';
 
-const TRANSITIONS = {
-  SELECT_SHIPPING: 'Select shipping',
-  SKIP_SHIPPING: 'Skip shipping',
-  ADDRESS: 'Update address',
-};
+// Import logic
+import usePayment from './usePayment';
 
-function Payment({ send, currentState }) {
-  if (currentState.match('payment_skipped')) {
-    const SKIP_TRANSITIONS = { ...TRANSITIONS, COMPLETE: 'Go to confirmation' };
+function Payment() {
+  const {
+    send,
+    skipMode,
+    transitions,
+    skipTransitions,
+    selectResources,
+    handleSubmit,
+  } = usePayment();
+
+  if (skipMode) {
     return (
-      <>
-        <Box>pay later</Box>
-        <TransitionButtons transitions={SKIP_TRANSITIONS} send={send} />
-      </>
+      <TransitionButtons
+        transitions={skipTransitions}
+        send={send}
+        skipTitle={'Pay later (payment skipped)'}
+      />
     );
   }
 
-  const selectResources = { payment_method: SELECT_VALUES };
-
-  const handleSubmit = (values) => {
-    send({ type: 'COMPLETE', value: values.payment_method });
-  };
-
   return (
     <>
-      <TransitionButtons transitions={TRANSITIONS} send={send} />
+      <TransitionButtons transitions={transitions} send={send} />
       <FormTemplate
         initialValues={INITIAL_STATE}
         fields={PAYMENT_FIELDS}
@@ -49,9 +43,5 @@ function Payment({ send, currentState }) {
     </>
   );
 }
-
-Payment.propTypes = {
-  send: func.isRequired,
-};
 
 export default Payment;

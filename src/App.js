@@ -1,8 +1,15 @@
 import React from 'react';
 
 // Import components
-import { ChakraProvider, Box, Text, theme, Code } from '@chakra-ui/react';
-import { Cart, Address, Shipping, Payment, Confirmation } from 'components';
+import { ChakraProvider, Box, theme } from '@chakra-ui/react';
+import {
+  Cart,
+  Address,
+  Shipping,
+  Payment,
+  Confirmation,
+  ViewTitle,
+} from 'components';
 
 // Import context
 import { CheckoutMachineProvider, CheckoutMachineContext } from 'state/context';
@@ -18,10 +25,6 @@ function App() {
       <CheckoutMachineProvider>
         <CheckoutMachineContext.Consumer>
           {({
-            state, //delete after refactor
-            send, //delete after refactor
-            currentStateValue, //delete after refactor
-            stateContext, //delete after refactor
             showCart,
             showAdress,
             showShipping,
@@ -29,35 +32,16 @@ function App() {
             showConfirmation,
           }) => (
             <Box textAlign="center" fontSize="xl">
-              {/* <Steps state={state} send={send} /> */}
-              <Text>STATE{currentStateValue}</Text>
-              <Code>CONTEXT{JSON.stringify(stateContext, null, 2)}</Code>
-
+              <ViewTitle />
               {showCart && <Cart />}
 
-              {showAdress && (
-                <Address send={send} initialData={stateContext.address} />
-              )}
+              {showAdress && <Address />}
 
-              {showShipping && (
-                <Shipping
-                  send={send}
-                  initialData={stateContext.shipping_method}
-                  address={stateContext.address}
-                  currentState={currentStateValue}
-                />
-              )}
+              {showShipping && <Shipping />}
 
-              {showPayment && (
-                <Payment
-                  send={send}
-                  initialData={stateContext.payment_method}
-                  address={stateContext.address}
-                  currentState={currentStateValue}
-                />
-              )}
+              {showPayment && <Payment />}
 
-              {showConfirmation && <Confirmation context={stateContext} />}
+              {showConfirmation && <Confirmation />}
             </Box>
           )}
         </CheckoutMachineContext.Consumer>
