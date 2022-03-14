@@ -13,7 +13,7 @@ export const CheckoutMachineContext = React.createContext();
  * it cleans up code nicely.
  */
 function CheckoutMachineProvider({ children }) {
-  const [state, send] = useMachine(checkoutStateMachine, { devTools: true });
+  const [state, send] = useMachine(checkoutStateMachine);
 
   // state variables
   const currentStateValue = state.value;

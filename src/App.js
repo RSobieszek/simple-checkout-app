@@ -14,11 +14,6 @@ import {
 // Import context
 import { CheckoutMachineProvider, CheckoutMachineContext } from 'state/context';
 
-// Import xState
-import { inspect } from '@xstate/inspect';
-
-inspect({ iframe: false, url: 'https://statecharts.io/inspect' });
-
 function App() {
   return (
     <ChakraProvider theme={theme}>

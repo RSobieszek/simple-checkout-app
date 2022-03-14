@@ -9,7 +9,7 @@ import { Button } from '@chakra-ui/react';
 
 function AsyncButton({ payload, children }) {
   // Normally I'd use react query or Redux but let's practice some FSMs!
-  const [state, send] = useMachine(asyncButtonMachine, { devTools: true });
+  const [state, send] = useMachine(asyncButtonMachine);
 
   const colorScheme = {
     success: 'green',
