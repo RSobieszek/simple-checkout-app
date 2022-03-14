@@ -28,37 +28,42 @@ function App() {
     state.matches
   );
 
+  const currentState = state.value;
+  const stateContext = state.context;
+
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
         <Steps state={state} send={send} />
-        <Text>STATE{state.value}</Text>
-        <Code>CONTEXT{JSON.stringify(state.context, null, 2)}</Code>
+        <Text>STATE{currentState}</Text>
+        <Code>CONTEXT{JSON.stringify(stateContext, null, 2)}</Code>
 
-        {state.value.match('cart') && <Cart send={send} />}
+        {currentState.match('cart') && <Cart send={send} />}
 
-        {state.value.match('addressed') && (
-          <Address send={send} initialData={state.context.address} />
+        {currentState.match('addressed') && (
+          <Address send={send} initialData={stateContext.address} />
         )}
 
         {showShipping && (
           <Shipping
             send={send}
-            initialData={state.context.shipping_method}
-            address={state.context.address}
+            initialData={stateContext.shipping_method}
+            address={stateContext.address}
+            currentState={currentState}
           />
         )}
 
         {showPayment && (
           <Payment
             send={send}
-            initialData={state.context.shipping_method}
-            address={state.context.address}
+            initialData={stateContext.payment_method}
+            address={stateContext.address}
+            currentState={currentState}
           />
         )}
 
-        {state.value.match('completed') && (
-          <Confirmation context={state.context} />
+        {currentState.match('completed') && (
+          <Confirmation context={stateContext} />
         )}
       </Box>
     </ChakraProvider>

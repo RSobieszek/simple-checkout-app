@@ -2,7 +2,7 @@ import React from 'react';
 import { func } from 'prop-types';
 
 // Import components
-import { FormTemplate } from 'components';
+import { FormTemplate, TransitionButtons } from 'components';
 
 // Import fields
 import {
@@ -10,8 +10,24 @@ import {
   INITIAL_STATE,
   SELECT_VALUES,
 } from './form/input_fields';
+import { Box } from '@chakra-ui/react';
 
-function Payment({ send }) {
+const TRANSITIONS = {
+  SELECT_SHIPPING: 'Select shipping',
+  SKIP_SHIPPING: 'Skip shipping',
+  ADDRESS: 'Update address',
+};
+
+function Payment({ send, currentState }) {
+  if (currentState.match('payment_skipped')) {
+    return (
+      <>
+        <Box>pay later</Box>
+        <TransitionButtons transitions={TRANSITIONS} send={send} />
+      </>
+    );
+  }
+
   const selectResources = { payment_method: SELECT_VALUES };
 
   const handleSubmit = (values) => {
@@ -19,14 +35,17 @@ function Payment({ send }) {
   };
 
   return (
-    <FormTemplate
-      initialValues={INITIAL_STATE}
-      fields={PAYMENT_FIELDS}
-      selectResources={selectResources}
-      onSubmit={handleSubmit}
-      hideCancelButton={true}
-      submitButtonText="Save and go to confirmation"
-    />
+    <>
+      <TransitionButtons transitions={TRANSITIONS} send={send} />
+      <FormTemplate
+        initialValues={INITIAL_STATE}
+        fields={PAYMENT_FIELDS}
+        selectResources={selectResources}
+        onSubmit={handleSubmit}
+        hideCancelButton={true}
+        submitButtonText="Save and go to confirmation"
+      />
+    </>
   );
 }
 

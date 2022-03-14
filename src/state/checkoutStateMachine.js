@@ -45,6 +45,7 @@ const checkoutStateMachine = createMachine(
         },
       },
       shipping_skipped: {
+        entry: 'resetShipping',
         on: {
           SELECT_PAYMENT: 'payment_selected',
           SKIP_PAYMENT: 'payment_skipped',
@@ -63,6 +64,7 @@ const checkoutStateMachine = createMachine(
         },
       },
       payment_skipped: {
+        entry: 'resetPayment',
         on: {
           ADDRESS: 'addressed',
           COMPLETE: 'completed',
@@ -78,6 +80,8 @@ const checkoutStateMachine = createMachine(
       setAddress: assign({ address: (_, event) => event.value }),
       setShippingMethod: assign({ shipping_method: (_, event) => event.value }),
       setPaymentMethod: assign({ payment_method: (_, event) => event.value }),
+      resetShipping: assign({ shipping_method: null }),
+      resetPayment: assign({ payment_method: null }),
     },
   }
 );

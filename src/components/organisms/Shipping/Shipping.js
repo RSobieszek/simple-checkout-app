@@ -2,7 +2,7 @@ import React from 'react';
 import { func, object } from 'prop-types';
 
 // Import components
-import { FormTemplate } from 'components';
+import { FormTemplate, TransitionButtons } from 'components';
 
 // Import fields
 import {
@@ -11,8 +11,24 @@ import {
   SELECT_VALUES,
 } from './form/input_fields';
 import { POLAND } from 'components/organisms/Address/form/input_fields';
+import { Box } from '@chakra-ui/react';
 
-function Shipping({ send, address }) {
+const TRANSITIONS = {
+  SELECT_PAYMENT: 'Select payment',
+  SKIP_PAYMENT: 'Skip payment',
+  ADDRESS: 'Update address',
+};
+
+function Shipping({ send, address, currentState }) {
+  if (currentState.match('shipping_skipped')) {
+    return (
+      <>
+        <Box>ship later</Box>
+        <TransitionButtons transitions={TRANSITIONS} send={send} />
+      </>
+    );
+  }
+
   const prepareSelectResources = (address) => {
     const selectValues =
       address.country === POLAND ? [SELECT_VALUES[0]] : SELECT_VALUES;
@@ -37,16 +53,19 @@ function Shipping({ send, address }) {
   };
 
   return (
-    <FormTemplate
-      initialValues={INITIAL_STATE}
-      fields={SHIPPING_FIELDS}
-      selectResources={prepareSelectResources(address)}
-      onSubmit={handleSubmit}
-      hideCancelButton={true}
-      submitButtonText="Save and go to payments"
-      skipButtonText="Save and pay later"
-      skip={handleSkipPayment}
-    />
+    <>
+      <TransitionButtons transitions={TRANSITIONS} send={send} />
+      <FormTemplate
+        initialValues={INITIAL_STATE}
+        fields={SHIPPING_FIELDS}
+        selectResources={prepareSelectResources(address)}
+        onSubmit={handleSubmit}
+        hideCancelButton={true}
+        submitButtonText="Save and go to payments"
+        skipButtonText="Save and pay later"
+        skip={handleSkipPayment}
+      />
+    </>
   );
 }
 
